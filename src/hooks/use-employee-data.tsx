@@ -11,6 +11,7 @@ export const useEmployeesData = ({ name }: EmployeeFilter = {}) => {
   return useQuery<Employee[]>({
     queryKey: ["employees", name],
     queryFn: () => CompanyApiService.getEmployees({ name }),
+    staleTime: 1000 * 60 * 10, // 10 minutes
   });
 };
 
