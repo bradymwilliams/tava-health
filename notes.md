@@ -9,7 +9,7 @@ npm run dev # runs api and app concurrently
 
 ## Overview
 
-The stackblitz I forked wouldn't let me use the termnial so I create a new vite react project and copied the instructions and other relevent bits over.
+The codesandbox I forked wouldn't let me use the termnial so I create a new vite react project and copied the instructions and other relevent bits over.
 
 While this is built in a single app, I wrote the front-end and back-end code as if they were completely separate, hopefully getting at what the heart of what the challenge is about.
 
