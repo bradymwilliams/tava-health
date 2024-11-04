@@ -12,7 +12,7 @@ export interface EmployeeFilter {
 class CompanyApiService {
   baseURL: string;
 
-  constructor(baseURL = "http://localhost:3000") {
+  constructor(baseURL = "https://yhwpmw-3000.csb.app") {
     this.baseURL = baseURL;
   }
 
