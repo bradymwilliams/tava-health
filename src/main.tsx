@@ -1,7 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Employees from "./routes/employees.tsx";
 import EmployeeDetails from "./routes/employees.$id.tsx";
 import Payroll from "./routes/payroll.tsx";
@@ -11,7 +15,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+
     children: [
+      {
+        path: "/",
+        element: <Navigate to="/employees" replace />,
+      },
       {
         path: "/employees",
         element: <Employees />,

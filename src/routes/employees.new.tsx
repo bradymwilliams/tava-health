@@ -32,10 +32,12 @@ import {
 } from "@radix-ui/react-popover";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 export default function NewEmployee() {
   const navigate = useNavigate();
   const { mutate } = useCreateEmployee();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof createEmployeeZ>>({
     resolver: zodResolver(createEmployeeZ),
@@ -53,7 +55,10 @@ export default function NewEmployee() {
   const onSubmit = async (values: z.infer<typeof createEmployeeZ>) => {
     mutate(values, {
       onSuccess: (data) => {
-        console.log("data", data);
+        toast({
+          title: "Success!",
+          description: "Employee has been created",
+        });
         navigate(`/employees/${data.id}`);
       },
     });

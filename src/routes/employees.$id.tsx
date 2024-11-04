@@ -6,6 +6,7 @@ import {
 } from "@/hooks/use-employee-data";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -58,8 +59,10 @@ export default function EmployeeProfile() {
 
 export function ProfileForm({ employee }: { employee: Employee }) {
   const navigate = useNavigate();
-  const { mutate } = useUpdateEmployee();
-  const { mutate: deleteEmployee } = useDeleteEmployee();
+  const { mutate, isSuccess, isError } = useUpdateEmployee();
+  const { mutate: deleteEmployee, isSuccess: isDeleteSuccess } =
+    useDeleteEmployee();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof updateEmployeeZ>>({
     resolver: zodResolver(updateEmployeeZ),
     defaultValues: employee
@@ -84,7 +87,24 @@ export function ProfileForm({ employee }: { employee: Employee }) {
     <>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((values) => mutate(values))}
+          onSubmit={form.handleSubmit((values) => {
+            mutate(values, {
+              onSuccess: () => {
+                toast({
+                  title: "Success!",
+                  duration: 2000,
+                  description: "Employee has been updated",
+                });
+              },
+              onError: () => {
+                toast({
+                  title: "Error",
+                  duration: 2000,
+                  description: "Failed to update employee",
+                });
+              },
+            });
+          })}
           className="space-y-4 max-w-md p-4 bg-background rounded shadow"
         >
           <input type="hidden" value={employee.id} {...form.register("id")} />
@@ -144,6 +164,20 @@ export function ProfileForm({ employee }: { employee: Employee }) {
 
           <FormField
             control={form.control}
+            name="avatarUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Avatar URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://i.pravatar.cc/150" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="quote"
             render={({ field }) => (
               <FormItem>
@@ -156,13 +190,6 @@ export function ProfileForm({ employee }: { employee: Employee }) {
             )}
           />
 
-          <div className="text-destructive">
-            {Object.entries(form.formState.errors).map(([key, error]) => (
-              <div key={key}>
-                {key}: {error?.message}
-              </div>
-            ))}
-          </div>
           <div className="flex items-center justify-between">
             <Button type="submit">Submit</Button>
             <Popover>
@@ -178,6 +205,12 @@ export function ProfileForm({ employee }: { employee: Employee }) {
                   <Button
                     onClick={() => {
                       deleteEmployee({ id: employee.id });
+
+                      toast({
+                        title: "Success!",
+                        duration: 2000,
+                        description: "Employee has been deleted",
+                      });
                       navigate("/employees");
                     }}
                   >
