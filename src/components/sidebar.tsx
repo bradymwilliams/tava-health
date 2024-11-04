@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import logo from "../assets/logo.png";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ThemeToggle } from "./theme-toggle";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -30,7 +30,9 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>
         <div className="dark:bg-foreground  p-2 border rounded-lg">
-          <img src={logo} alt="logo" />
+          <Link to="/">
+            <img src={logo} alt="logo" />
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent>
